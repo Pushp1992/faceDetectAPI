@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Container, Row, Col, Input, Button, Spinner, Badge, Card, CardTitle, CardText, CardHeader, CardBody, Collapse } from 'reactstrap';
+import { Container, Row, Col, Input, Button, Spinner, Card, CardText, CardHeader, CardBody, Collapse } from 'reactstrap';
 import PropTypes from 'prop-types';
 // Service
 import cognitiveService from '../FaceDetect/service';
@@ -132,7 +132,7 @@ class FaceRecognition extends Component {
 
         // Fetching actual objectArray from Array of object based on a particular key
         let finalHairColorArray = hairColorArray.filter((hairObject) => {
-            return hairObject.confidence == maxConfidence
+            return hairObject.confidence === maxConfidence
         })
 
         // Getting actual hairColor from finalHairColorArray
@@ -186,85 +186,88 @@ class FaceRecognition extends Component {
                             (this.state.processesedData.length !== 0) ?
                                 <React.Fragment>
                                     <div>
-                                        <Card body outline color="success">
+                                        <Card body outline color="primary">
 
                                             <CardHeader>
-                                                Image of <b>{this.state.faceAttributes.age}</b> year {''}
-                                                {
-                                                    (this.state.faceAttributes.gender === 'male') ?
-                                                        ((this.state.faceAttributes.age < 19) ? <b>'BOY'</b> : ((this.state.faceAttributes.age > 19 && this.state.faceAttributes.age < 60) ? <b>'MAN'</b> : <b>'Old Man'</b>))
-                                                        : ((this.state.faceAttributes.age < 19) ? <b>'GIRL' </b> : ((this.state.faceAttributes.age > 19 && this.state.faceAttributes.age < 60) ? <b>'Lady' </b> : <b>'Old WOMan'</b>))
-                                                }
-                                                {''} with {''} <b>{this.state.emotionType.toUpperCase()} </b> facial reaction.
+                                                <Card body outline color="warning">
+                                                    <CardText>
+                                                        Image of <b>{this.state.faceAttributes.age}</b> year {''}
+                                                        {
+                                                            (this.state.faceAttributes.gender === 'male') ?
+                                                                ((this.state.faceAttributes.age < 19) ? <b>'BOY'</b> : ((this.state.faceAttributes.age > 19 && this.state.faceAttributes.age < 60) ? <b>'MAN'</b> : <b>'Old Man'</b>))
+                                                                : ((this.state.faceAttributes.age < 19) ? <b>'GIRL' </b> : ((this.state.faceAttributes.age > 19 && this.state.faceAttributes.age < 60) ? <b>'Lady' </b> : <b>'Old WOMan'</b>))
+                                                        }
+                                                        {''} with {''} <b>{this.state.emotionType.toUpperCase()} </b> facial reaction.
+                                                   </CardText>
+                                                </Card>
                                             </CardHeader>
 
                                             <CardBody>
-                                                <CardTitle>
-                                                    <div>Wearing <b>{this.state.faceAttributes.glasses}</b></div>
-                                                    {
-                                                        (this.state.faceAttributes.gender === 'male') ?
-                                                            (
-                                                                <div>
-                                                                    <span><b>Has Moustache:</b> {''} {this.state.facialHair.moustache < 0.1 ? 'NO' : (this.state.facialHair.moustache <= 0.5 ? 'Somewhat' : 'Yes')} </span> <br />
-                                                                    <span><b>Has Beard:</b> {''} {this.state.facialHair.beard < 0.1 ? 'NO' : (this.state.facialHair.beard <= 0.5 ? 'Somewhat' : 'Yes')} </span>
-                                                                </div>
-                                                            ) : null
-                                                    }
-                                                </CardTitle>
-                                                <CardText>
-                                                    <div>
-                                                        <b>Hair</b> <br />
-                                                        <span>
-                                                            {
-                                                                (this.state.hair.bald > 0.7) ? 'Person is Bald' :
-                                                                    ((this.state.hair.bald >= 0.5) ? 'Person has less hair or he is somehwat Bald' : 'Person has Hair')
-                                                            }
-                                                        </span> <br />
-                                                        <span hidden={this.state.hair.bald > 0.7 ? true : false}>Hair Color: {this.state.hairColor} </span>
-                                                    </div>
-                                                    <div>
-                                                        <b>Makeup</b> <br />
-                                                        <span>Lip Makeup: {''} {this.state.makeup.lipMakeup === true ? <b>'LipStick'</b> : <b>'No'</b>} </span> <br />
-                                                        <span>Eye Makeup: {''} {this.state.makeup.eyeMakeup === true ? <b>'Yes'</b> : <b>'No'</b>}</span>
-                                                    </div> <br />
-
-                                                    <div>
-                                                        <b>Image Characteristic</b> <br />
-                                                        <span>BlurLevel: {''} {this.state.blur.blurLevel} </span> <br />
-                                                        <span>ExposureLevel: {''} {this.state.exposure.exposureLevel} </span>
-                                                    </div> <br />
-
-                                                </CardText>
-
                                                 <Button color="primary" onClick={this.toggle} style={{ marginBottom: '1rem' }}>More Details >>></Button>
+
+                                                {/** Hidden Card */}
+
+                                                <Collapse isOpen={this.state.collapse}>
+                                                    <Row noGutters={true}>
+                                                        <Col>
+                                                            <Card body outline color="success">
+                                                                <CardText>
+                                                                    <div>Wearing <b>{this.state.faceAttributes.glasses}</b></div> <br/>
+                                                                    <div>
+                                                                        {
+                                                                            (this.state.faceAttributes.gender === 'male') ?
+                                                                                (
+                                                                                    <div>
+                                                                                        <b>Face Attributes</b> <br />
+                                                                                        <span>Has Moustache: {''} {this.state.facialHair.moustache < 0.1 ? 'NO' : (this.state.facialHair.moustache <= 0.5 ? 'Somewhat' : 'Yes')} </span> <br />
+                                                                                        <span>Has Beard: {''} {this.state.facialHair.beard < 0.1 ? 'NO' : (this.state.facialHair.beard <= 0.5 ? 'Somewhat' : 'Yes')} </span>
+                                                                                    </div>
+                                                                                ) : null
+                                                                        }
+                                                                    </div> <br/>
+                                                                    <div>
+                                                                        <b>Image Characteristic</b> <br />
+                                                                        <span>BlurLevel: {''} {this.state.blur.blurLevel} </span> <br />
+                                                                        <span>ExposureLevel: {''} {this.state.exposure.exposureLevel} </span>
+                                                                    </div>
+                                                                </CardText>
+                                                            </Card>
+                                                        </Col>
+                                                    </Row>
+                                                    <br />
+                                                    <Row>
+                                                        <Col>
+                                                            <Card body outline color="danger">
+                                                                <CardText>
+                                                                    <div>
+                                                                        <b>Hair</b> <br />
+                                                                        <span>
+                                                                            {
+                                                                                (this.state.hair.bald > 0.7) ? 'Person is Bald' :
+                                                                                    ((this.state.hair.bald >= 0.5) ? 'Person has less hair or he is somehwat Bald' : 'Person has Hair')
+                                                                            }
+                                                                        </span> <br />
+                                                                        <span hidden={this.state.hair.bald > 0.7 ? true : false}>Hair Color: {this.state.hairColor} </span>
+                                                                    </div>
+                                                                    <div>
+                                                                        <b>Makeup</b> <br />
+                                                                        <span>Lip Makeup: {''} {this.state.makeup.lipMakeup === true ? <b>'LipStick'</b> : <b>'No'</b>} </span> <br />
+                                                                        <span>Eye Makeup: {''} {this.state.makeup.eyeMakeup === true ? <b>'Yes'</b> : <b>'No'</b>}</span>
+                                                                    </div> <br />
+                                                                </CardText>
+                                                            </Card>
+                                                        </Col>
+                                                    </Row>
+                                                </Collapse>
                                             </CardBody>
 
                                         </Card>
                                     </div>
 
                                     <br />
-                                    {/** Hidden Card */}
-
-                                    <Collapse isOpen={this.state.collapse}>
-                                        <Row noGutters={true}>
-                                            <Col>
-                                                <Card body inverse style={{ backgroundColor: '#333', borderColor: '#333' }}>
-                                                    <CardTitle>Special Title Treatment</CardTitle>
-                                                    <CardText>With supporting text below as a natural lead-in to additional content.</CardText>
-                                                </Card>
-                                            </Col>
-                                            <Col>
-                                                <Card body inverse style={{ backgroundColor: '#333', borderColor: '#333' }}>
-                                                    <CardTitle>Special Title Treatment</CardTitle>
-                                                    <CardText>With supporting text below as a natural lead-in to additional content.</CardText>
-                                                </Card>
-                                            </Col>
-                                        </Row>
-                                    </Collapse>
                                 </React.Fragment>
                                 : null
                         }
-
 
                     </Col>
                 </Row>
@@ -274,3 +277,8 @@ class FaceRecognition extends Component {
 }
 
 export default FaceRecognition;
+
+
+
+
+
