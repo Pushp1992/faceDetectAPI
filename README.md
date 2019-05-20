@@ -5,6 +5,12 @@ After cloning this project, install all the dependency of this project
 
 ## Available Scripts
 
+## Subscription Key for API Call
+Please signup on https://azure.microsoft.com/en-us/  to generate your own yosubscription key.
+Signup is free.
+
+Current subscription key will not work, as it might have been expired. It is located in (src/component/service.js)So, please generate your own
+
 In the project directory, you can run:
 
 ### `npm run start`
